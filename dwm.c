@@ -1650,15 +1650,6 @@ void
 spawn(const Arg *arg)
 {
 	struct sigaction sa;
-
-	if (isArgDelegationDouble(arg)) {
-		// spreadlog("arg is double!");
-		ArgDelegationDouble *delegation = (ArgDelegationDouble *)(arg->v);
-		spawn(&(delegation->realArg[0]));
-		spawn(&(delegation->realArg[1]));
-		return;
-	}
-
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
 	if (fork() == 0) {
