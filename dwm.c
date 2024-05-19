@@ -206,6 +206,7 @@ static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void spawn(const Arg *arg);
+// static void spawnList(const Arg *arg, ...);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
@@ -1665,6 +1666,16 @@ spawn(const Arg *arg)
 		die("dwm: execvp '%s' failed:", ((char **)arg->v)[0]);
 	}
 }
+
+// void spawnList(int size, ...) {
+// 	va_list args;
+// 	va_start(args, size);
+// 	for (size_t i = 0; i < size; i++) {
+// 		Arg *arg = va_arg(args, Arg*);
+// 		spawn(arg);
+// 	}
+// 	va_end(args);
+// }
 
 void
 tag(const Arg *arg)
