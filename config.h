@@ -1,14 +1,15 @@
 /* See LICENSE file for copyright and license details. */
 
 #include <X11/XF86keysym.h>
+#include "depend/delegation.h"
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = { "Terminus (TTF):size=18" };
+static const char dmenufont[]       = "Terminus (TTF):size=18";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -57,34 +58,28 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-#define	ARG_TYPE_LIST			101
-#define IS_ARG_DELEGATION(x)	sizeof(x) == sizeof(Arg *) + sizeof(ArgType)
-
-typedef int ArgType;
-typedef struct wrapper {
-	Arg *realArg[];
-	ArgType type;
-} ArgDelegation;
-
-
 /* commands */
-static const char *update_status_bar_sh = "/home/spreadzhao/SpreadBash/update-status-bar.sh";
+static const char update_status_bar_sh[] = "/home/spreadzhao/SpreadBash/update-status-bar.sh";
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *mutecmd[] = { "amixer", "-q", "set", "Master", "toggle", NULL };
 static const char *volupcmd[] = { "amixer", "-q", "set", "Master", "5%+", "unmute", NULL };
 static const char *voldowncmd[] = { "amixer", "-q", "set", "Master", "5%-", "unmute", NULL };
-static const char *miccmd[] = { "amixer", "set", "Capture", "toggle", NULL };
+// static const char *miccmd[] = { "amixer", "set", "Capture", "toggle", NULL };
 static const char *updatestatusbarcmd[] = { update_status_bar_sh, NULL };
-static const ArgDelegation mutecmdDelegation = {
-	{ {.v = mutecmd }, {.v = updatestatusbarcmd} },
-	ARG_TYPE_LIST
-}
-static const ArgDelegation volupcmdDelegation = {
-	{ {.v = volupcmd}, {.v = updatestatusbarcmd} },
-	ARG_TYPE_LIST
-}
+static const ArgDelegationDouble mutecmdDelegation = {
+	ARG_TYPE_DOUBLE,
+	{ {.v = mutecmd }, {.v = updatestatusbarcmd} }
+};
+static const ArgDelegationDouble volupcmdDelegation = {
+	ARG_TYPE_DOUBLE,
+	{ {.v = volupcmd}, {.v = updatestatusbarcmd} }
+};
+static const ArgDelegationDouble voldowncmdDelegation = {
+	ARG_TYPE_DOUBLE,
+	{ {.v = voldowncmd}, {.v = updatestatusbarcmd} }
+};
 
 
 static const Key keys[] = {
@@ -122,9 +117,9 @@ static const Key keys[] = {
 	TAGKEYS(XK_8, 7)	
 	TAGKEYS(XK_9, 8)	
 	{ MODKEY|ShiftMask,             XK_q,      					quit,           			{0} },
-	{ 0,							XF86XK_AudioMute, 			spawn, 						{.v = mutecmd} },
-	{ 0,							XF86XK_AudioLowerVolume,	spawn, 						{.v = voldowncmd} },
-	{ 0,							XF86XK_AudioRaiseVolume,	spawn,						{.v = volupcmd} }
+	{ 0,							XF86XK_AudioMute, 			spawn, 						{.v = &mutecmdDelegation} },
+	{ 0,							XF86XK_AudioLowerVolume,	spawn, 						{.v = &voldowncmdDelegation} },
+	{ 0,							XF86XK_AudioRaiseVolume,	spawn,						{.v = &volupcmdDelegation} }
 };
 
 /* button definitions */

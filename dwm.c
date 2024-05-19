@@ -40,6 +40,7 @@
 #include <X11/extensions/Xinerama.h>
 #endif /* XINERAMA */
 #include <X11/Xft/Xft.h>
+#include <systemd/sd-journal.h>
 
 #include "drw.h"
 #include "util.h"
@@ -1650,6 +1651,14 @@ spawn(const Arg *arg)
 {
 	struct sigaction sa;
 
+	if (isArgDelegationDouble(arg)) {
+		// spreadlog("arg is double!");
+		ArgDelegationDouble *delegation = (ArgDelegationDouble *)(arg->v);
+		spawn(&(delegation->realArg[0]));
+		spawn(&(delegation->realArg[1]));
+		return;
+	}
+
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
 	if (fork() == 0) {
@@ -1666,16 +1675,6 @@ spawn(const Arg *arg)
 		die("dwm: execvp '%s' failed:", ((char **)arg->v)[0]);
 	}
 }
-
-// void spawnList(int size, ...) {
-// 	va_list args;
-// 	va_start(args, size);
-// 	for (size_t i = 0; i < size; i++) {
-// 		Arg *arg = va_arg(args, Arg*);
-// 		spawn(arg);
-// 	}
-// 	va_end(args);
-// }
 
 void
 tag(const Arg *arg)
