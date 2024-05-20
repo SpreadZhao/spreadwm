@@ -57,11 +57,14 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-/* commands */
-static const char update_status_bar_sh[] = "/home/spreadzhao/SpreadBash/update-status-bar.sh";
+/* 
+ * commands
+ * execvp must have a NULL as the last param!
+ */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
+static const char *flameshotcmd[] = { "flameshot", "gui", NULL };
 
 
 static const Key keys[] = {
@@ -101,7 +104,8 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_q,      					quit,           			{0} },
 	{ 0,							XF86XK_AudioMute,			spawn,						SHCMD("$SDWM/volume.sh mute") },
 	{ 0,							XF86XK_AudioLowerVolume,	spawn, 						SHCMD("$SDWM/volume.sh down") },
-	{ 0,							XF86XK_AudioRaiseVolume,	spawn,						SHCMD("$SDWM/volume.sh up") }
+	{ 0,							XF86XK_AudioRaiseVolume,	spawn,						SHCMD("$SDWM/volume.sh up") },
+	{ ControlMask|ShiftMask,		XK_a,						spawn,						{.v = flameshotcmd} }
 };
 
 /* button definitions */
