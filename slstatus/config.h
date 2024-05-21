@@ -5,6 +5,7 @@ const unsigned int interval = 1000;
 
 /* text to show if no value can be retrieved */
 static const char unknown_str[] = "n/a";
+static const char get_vol_cmd[] = "amixer sget Master | tail -1 | awk '{print $5 }' | sed 's@\\(\\[\\|\\]\\)@@g'";
 
 /* maximum output string length */
 #define MAXLEN 	2048
@@ -70,7 +71,7 @@ static const struct arg args[] = {
 	{ battery_state, 			"%s", 			"BAT0"},
 	{ battery_perc, 			"%s%%", 		"BAT0"},
 	SPLIT,
-	{ run_command,				"%s",			"$SDWM/volume-get-slstatus.sh" },
+	{ run_command, 				"🔈%s", 		get_vol_cmd },
 	SPLIT,
 	{ datetime, 				"%s",           "%H:%M %m-%d" },
 	SPLIT
