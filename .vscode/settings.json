@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "xf86keysym.h": "c",
-        "xft.h": "c",
-        "xinerama.h": "c",
-        "xutil.h": "c",
-        "sd-journal.h": "c"
-    }
-}
