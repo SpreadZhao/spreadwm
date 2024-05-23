@@ -71,7 +71,7 @@ static const struct arg args[] = {
 	{ battery_state, 			"%s", 			"BAT0"},
 	{ battery_perc, 			"%s%%", 		"BAT0"},
 	SPLIT,
-	{ run_command, 				"🔈%s", 		get_vol_cmd },
+	{ run_command, 				"󰕾 %s", 		get_vol_cmd },
 	SPLIT,
 	{ datetime, 				"%s",           "%H:%M %m-%d" },
 	SPLIT
