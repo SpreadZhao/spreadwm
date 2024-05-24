@@ -89,6 +89,6 @@ static const struct arg args[] = {
 	SPLIT,
 	{ run_command, 				"%s", 		 	get_vol_cmd_pulse },
 	SPLIT,
-	{ datetime, 				"%s",           "%H:%M %m-%d" },
+	{ datetime, 				"%s",           "%H:%M:%S %m-%d" },
 	SPLIT
 };
