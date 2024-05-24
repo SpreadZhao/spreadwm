@@ -5,10 +5,19 @@ const unsigned int interval = 1000;
 
 /* text to show if no value can be retrieved */
 static const char unknown_str[] = "n/a";
-static const char get_vol_cmd[] = "amixer sget Master | tail -1 | awk '{print $5 }' | sed 's@\\(\\[\\|\\]\\)@@g'";
+static const char get_vol_cmd[] = "VOL=$(amixer sget Master | tail -1 | awk '{print $5 }' | sed \"s@\\\\(\\\\[\\\\|\\\\]\\\\)@@g\"); "
+								  "VOLSTATUS=$(amixer sget Master | tail -1 | awk '{print $6 }' | sed \"s@\\\\(\\\\[\\\\|\\\\]\\\\)@@g\"); "
+								  "if [ \"$VOLSTATUS\" == \"on\" ]; then "
+								  "RES=\"󰕾 $VOL\"; "
+								  "else "
+								  "RES=\"󰖁 $VOL\"; "
+								  "fi; "
+								  "printf '%s\\n' \"$RES\"";
+static const char get_vol_cmd_pulse[] = "$SDWM/volume-get-slstatus-pulseaudio.sh";
 
 /* maximum output string length */
 #define MAXLEN 	2048
+#define SHCMD(cmd) (const char*)"/bin/sh -c \"" cmd "\""
 #define SPLIT	{ run_command, "%s", "echo \" | \"" }
 
 /*
@@ -71,7 +80,7 @@ static const struct arg args[] = {
 	{ battery_state, 			"%s", 			"BAT0"},
 	{ battery_perc, 			"%s%%", 		"BAT0"},
 	SPLIT,
-	{ run_command, 				"󰕾 %s", 		get_vol_cmd },
+	{ run_command, 				"%s", 		 	get_vol_cmd_pulse },
 	SPLIT,
 	{ datetime, 				"%s",           "%H:%M %m-%d" },
 	SPLIT
