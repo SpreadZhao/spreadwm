@@ -13,7 +13,14 @@ static const char get_vol_cmd[] = "VOL=$(amixer sget Master | tail -1 | awk '{pr
 								  "RES=\"󰖁 $VOL\"; "
 								  "fi; "
 								  "printf '%s\\n' \"$RES\"";
-static const char get_vol_cmd_pulse[] = "$SDWM/volume-get-slstatus-pulseaudio.sh";
+static const char get_vol_cmd_pulse[] = "STATUS=$(pamixer --get-volume-human);"
+										"VOL=$(pamixer --get-volume);"
+										"if [ \"$STATUS\" == \"muted\" ]; then"
+										"    RES=\"󰖁 $VOL%\";"
+										"else"
+										"    RES=\"󰕾 $VOL%\";"
+										"fi;"
+										"echo \"$RES\"";
 
 /* maximum output string length */
 #define MAXLEN 	2048
